@@ -49,18 +49,18 @@ for devidusb in /dev/disk/by-id/usb*; do
       # Check if 'exec' allowed and run Tagasaurus.
       if [[ -n $(findmnt -t vfat,exfat -O exec -O fmask=0000 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
         echo "Drive $usbdev allowed to execute, running $path_ts"
-        nohup $path_ts  &>/dev/null & disown
+        $path_ts
         exit
-        else 
-          # Remount with 'umask=000' if 'exec' not allowed and run Tagasaurus.
-          if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O fmask=0022 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
-            remount_fat $usbdev $usbmnt
-            echo "Running $path_ts"
-            nohup $path_ts  &>/dev/null & disown
-            exit
-          fi
+      else 
+        # Remount with 'umask=000' if 'exec' not allowed and run Tagasaurus.
+        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O fmask=0022 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+          remount_fat $usbdev $usbmnt
+          echo "Running $path_ts"
+          $path_ts
+          exit
         fi
-      else
+      fi
+    else
 
       # Find if TagasaurusFiles folder exist on root folder of certain USB drive mount, if yes - ask for Tagasaurus download, then run.
       path_tsfiles=$(find "$usbmnt" -maxdepth 1 -type d -iname "TagasaurusFiles"); [[ -n $path_tsfiles ]] && echo "TagasaurusFiles data folder exist: $path_tsfiles"
@@ -69,7 +69,7 @@ for devidusb in /dev/disk/by-id/usb*; do
         ts_download "$usbmnt"
         path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
         echo "Running $path_ts"
-        nohup $path_ts  &>/dev/null & disown
+        $path_ts
         exit
       else 
         # Remount with 'umask=000' if 'exec' not allowed, then ask for download Tagasaurus and run.
@@ -79,7 +79,7 @@ for devidusb in /dev/disk/by-id/usb*; do
           ts_download "$usbmnt"
           path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
           echo "Running $path_ts"
-          nohup $path_ts  &>/dev/null & disown
+          $path_ts
           exit
         fi
       fi
