@@ -33,7 +33,7 @@ remount_fat () {
   echo "Remounting $1 to $2 with permission to execute."
   sudo umount $2
   sudo mkdir -p $2
-  sudo mount -o umask=000,utf8 $1 $2
+  sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $1 $2
 }
 
 # Find corresponding USB drives and process it
