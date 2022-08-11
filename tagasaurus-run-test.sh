@@ -3,6 +3,7 @@
 # set -e
 # set -uo pipefail
 set -x
+trap "exit 1" ERR
 
 mounted=""
 
@@ -55,7 +56,8 @@ for devidusb in /dev/disk/by-id/usb*; do
         # Remount with `rw,uid=$(id -u),gid=$(id -g),utf8` and run Tagasaurus.
         if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           if [[ -n $(echo "$PWD" | grep "$usbmnt") ]]; then cd ~; fi
-          remount_fat $usbdev $usbmnt || { echo "Remount Error. Quit." && exit 1; }
+          remount_fat $usbdev $usbmnt 
+          (($? != 0)) && { printf '%s\n' "Remount Error. Quit."; exit 1; }
           echo "Running $path_ts"
           $path_ts
           exit
@@ -77,7 +79,8 @@ for devidusb in /dev/disk/by-id/usb*; do
         if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           echo "Drive $usbmnt not allowed to exec."
           if [[ -n $(echo "$PWD" | grep "$usbmnt") ]]; then cd ~; fi
-          remount_fat $usbdev $usbmnt || { echo "Remount Error. Quit." && exit 1; }
+          remount_fat $usbdev $usbmnt
+          (($? != 0)) && { printf '%s\n' "Remount Error. Quit."; exit 1; }
           ts_download "$usbmnt"
           path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
           echo "Running $path_ts"
