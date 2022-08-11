@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # set -e
+# trap "exit 1" ERR
 # set -uo pipefail
 set -x
-trap "exit 1" ERR
 
 mounted=""
 
