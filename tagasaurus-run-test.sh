@@ -54,6 +54,7 @@ for devidusb in /dev/disk/by-id/usb*; do
       else 
         # Remount with `rw,uid=$(id -u),gid=$(id -g),utf8` and run Tagasaurus.
         if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O nouid=$(id -u),nogid=$(id -g),norw -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+          if [[ -n $(echo "$PWD" | grep "$usbmnt") ]]; then cd ~; fi
           remount_fat $usbdev $usbmnt
           echo "Running $path_ts"
           $path_ts
