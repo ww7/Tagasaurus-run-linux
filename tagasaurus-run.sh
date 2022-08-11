@@ -31,8 +31,8 @@ ts_download () {
 remount_fat () {
   #if [ "$EUID" -ne 0 ]; then echo "Remount require 'root' premissions. Please run the script as 'root' or with 'sudo'"; exit; fi
   echo "Remounting $1 to $2 with permission to exec."
-  sudo umount -l $2
-  sudo mkdir -p $2
+  sudo umount -l $2 || exit 1
+  sudo mkdir -p $2 || exit 1
   sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $1 $2 || exit 1
 }
 
