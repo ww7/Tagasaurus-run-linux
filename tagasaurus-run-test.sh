@@ -87,6 +87,7 @@ for devidusb in /dev/disk/by-id/usb*; do
       fi
     fi
     mounted=$usbmnt
+    if [[ -n $path_ts ]]; then $path_ts; else echo "Tagasaurus on $usbmnt not found."; fi
 done
 
 if [[ -z "$mounted" ]]; then echo "No USB drives with FAT/exFAT mounted."; fi
