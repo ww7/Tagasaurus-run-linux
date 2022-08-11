@@ -18,7 +18,7 @@ ts_download () {
   latest_tag=$(echo "$latest_info" | awk -F\" '/tag_name/{print $(NF-1)}')
   latest_targz=$( echo "$latest_info" | awk -F\" '/browser_download_url.*.tar.gz/{print $(NF-1)}')
   #latest_zip=$( echo "$latest_info" | awk -F\" '/browser_download_url.*.zip/{print $(NF-1)}')
-  if [[ -n $1 && ! -d "$1" ]]; then mkdir -p "$1" || { echo "Error. Quit." && exit 1; } fi
+  if [[ -n $1 && ! -d "$1" ]]; then mkdir -p "$1" || { echo "Error. Can't create parent directory. Quit." && exit 1; } fi
   if [[ -n $1 ]]; then cd "$1" || { echo "Error. Input path not exist. Quit." && exit 1; }; fi
   if [[ -d tagasaurus-$latest_tag  ]]; then { echo "Folder $PWD/tagasaurus-$latest_tag exist (latest version). Quit." && return; } fi
   echo "Donwloading and unpacking: $latest_targz"
@@ -47,13 +47,13 @@ for devidusb in /dev/disk/by-id/usb*; do
     if [[ -n $path_ts ]]; then 
       echo "Found Tagasaurus at path: $path_ts"; 
       # Check if 'exec' allowed and run Tagasaurus.
-      if [[ -n $(findmnt -t vfat,exfat -O exec -O fmask=0000 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+      if [[ -n $(findmnt -t vfat,exfat -O rw -O uid=$(id -u) -O gid=$(id -g) -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
         echo "Drive $usbdev allowed to execute, running $path_ts"
         $path_ts
         exit
       else 
-        # Remount with 'umask=000' if 'exec' not allowed and run Tagasaurus.
-        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O fmask=0022 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+        # Remount with `rw,uid=$(id -u),gid=$(id -g),utf8` and run Tagasaurus.
+        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O nouid=$(id -u),nogid=$(id -g),norw -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           remount_fat $usbdev $usbmnt
           echo "Running $path_ts"
           $path_ts
