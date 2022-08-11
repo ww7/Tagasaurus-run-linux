@@ -50,6 +50,7 @@ for devidusb in /dev/disk/by-id/usb*; do
       # Check if 'exec' allowed and run Tagasaurus.
       if [[ -n $(findmnt -t vfat,exfat -O exec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
         echo "Drive $usbdev allowed to exec, running $path_ts"
+        echo "Running $path_ts"
         nohup $path_ts  &>/dev/null & disown
         exit
       else 
