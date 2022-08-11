@@ -31,7 +31,7 @@ ts_download () {
 remount_fat () {
   #if [ "$EUID" -ne 0 ]; then echo "Remount require 'root' premissions. Please run the script as 'root' or with 'sudo'"; exit; fi
   echo "Remounting $1 to $2 with permission to execute."
-  sudo umount $2
+  sudo umount -l $2
   sudo mkdir -p $2
   sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $1 $2
 }
@@ -54,7 +54,6 @@ for devidusb in /dev/disk/by-id/usb*; do
       else 
         # Remount with `rw,uid=$(id -u),gid=$(id -g),utf8` and run Tagasaurus.
         if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O nouid=$(id -u),nogid=$(id -g),norw -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
-          if [[ -n $(echo "$PWD" | grep "$usbmnt") ]]; then cd ~; fi
           remount_fat $usbdev $usbmnt
           echo "Running $path_ts"
           $path_ts
@@ -76,7 +75,6 @@ for devidusb in /dev/disk/by-id/usb*; do
         # Remount with with `rw,uid=$(id -u),gid=$(id -g),utf8`, then ask for download Tagasaurus and run.
         if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O nouid=$(id -u),nogid=$(id -g),norw -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           echo "Drive $usbmnt not allowed to exec."
-          if [[ -n $(echo "$PWD" | grep "$usbmnt") ]]; then cd ~; fi
           remount_fat $usbdev $usbmnt
           ts_download "$usbmnt"
           path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
