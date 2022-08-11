@@ -47,7 +47,7 @@ for devidusb in /dev/disk/by-id/usb*; do
     if [[ -n $path_ts ]]; then 
       echo "Found Tagasaurus at path: $path_ts"; 
       # Check if 'exec' allowed and run Tagasaurus.
-      if [[ -n $(findmnt -t vfat,exfat -O exec -O rw -O uid=$(id -u) -O gid=$(id -g) -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+      if [[ -n $(findmnt -t vfat,exfat -O exec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
         echo "Drive $usbdev allowed to exec, running $path_ts"
         $path_ts
         exit
@@ -64,7 +64,7 @@ for devidusb in /dev/disk/by-id/usb*; do
 
       # Find if TagasaurusFiles folder exist on root folder of certain USB drive mount, if yes - ask for Tagasaurus download, then run.
       path_tsfiles=$(find "$usbmnt" -maxdepth 1 -type d -iname "TagasaurusFiles"); [[ -n $path_tsfiles ]] && echo "TagasaurusFiles data folder exist: $path_tsfiles"
-      if [[ -n $(findmnt -t vfat,exfat -O exec -O fmask=0000 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+      if [[ -n $(findmnt -t vfat,exfat -O exec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
         echo "Drive $usbdev allowed to exec." 
         ts_download "$usbmnt"
         path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
