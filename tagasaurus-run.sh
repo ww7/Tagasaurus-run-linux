@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# set -e
+set -e
 # set -uo pipefail
-set -x
+# set -x
 
 mounted=""
 
