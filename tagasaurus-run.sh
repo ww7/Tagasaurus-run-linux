@@ -53,7 +53,7 @@ for devidusb in /dev/disk/by-id/usb*; do
         exit
       else 
         # Remount with 'umask=000' if 'exec' not allowed and run Tagasaurus.
-        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O fmask=0022 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           remount_fat $usbdev $usbmnt
           echo "Running $path_ts"
           nohup $path_ts  &>/dev/null & disown
@@ -73,7 +73,7 @@ for devidusb in /dev/disk/by-id/usb*; do
         exit
       else 
         # Remount with 'umask=000' if 'exec' not allowed, then ask for download Tagasaurus and run.
-        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -O fmask=0022 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+        if [[ -n $(findmnt -t vfat,exfat -O noexec -O showexec -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
           echo "Drive $usbmnt not allowed to exec."
           remount_fat $usbdev $usbmnt
           ts_download "$usbmnt"

@@ -30,7 +30,7 @@ ts_download () {
 # Function for remount
 remount_fat () {
   #if [ "$EUID" -ne 0 ]; then echo "Remount require 'root' premissions. Please run the script as 'root' or with 'sudo'"; exit; fi
-  echo "Remounting $1 to $2 with permission to execute."
+  echo "Remounting $1 to $2 with permission to exec."
   sudo umount -l $2
   sudo mkdir -p $2
   sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $1 $2
@@ -47,8 +47,8 @@ for devidusb in /dev/disk/by-id/usb*; do
     if [[ -n $path_ts ]]; then 
       echo "Found Tagasaurus at path: $path_ts"; 
       # Check if 'exec' allowed and run Tagasaurus.
-      if [[ -n $(findmnt -t vfat,exfat -O rw -O uid=$(id -u) -O gid=$(id -g) -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
-        echo "Drive $usbdev allowed to execute, running $path_ts"
+      if [[ -n $(findmnt -t vfat,exfat -O exec -O rw -O uid=$(id -u) -O gid=$(id -g) -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
+        echo "Drive $usbdev allowed to exec, running $path_ts"
         $path_ts
         exit
       else 
@@ -65,7 +65,7 @@ for devidusb in /dev/disk/by-id/usb*; do
       # Find if TagasaurusFiles folder exist on root folder of certain USB drive mount, if yes - ask for Tagasaurus download, then run.
       path_tsfiles=$(find "$usbmnt" -maxdepth 1 -type d -iname "TagasaurusFiles"); [[ -n $path_tsfiles ]] && echo "TagasaurusFiles data folder exist: $path_tsfiles"
       if [[ -n $(findmnt -t vfat,exfat -O exec -O fmask=0000 -nr -o target -S "$usbdev" | sed 's/\\x20/ /g') ]]; then
-        echo "Drive $usbdev allowed to execute" 
+        echo "Drive $usbdev allowed to exec." 
         ts_download "$usbmnt"
         path_ts=$(find "$usbmnt" -maxdepth 2 -type f -iname "tagasaurus")
         echo "Running $path_ts"
