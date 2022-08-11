@@ -1,6 +1,10 @@
 ### Run
 ```sh
 wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run.sh | bash
+or
+source <(wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run.sh)
+or
+source <(wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-
 ```
 
 ### Description
