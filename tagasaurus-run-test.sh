@@ -10,11 +10,11 @@ mount_to="/mnt/Tagasaurus"
 
 # Function for remount
 remount_fat () {
-  #if [ "$EUID" -ne 0 ]; then echo "Remount require 'root' premissions. Please run the script as 'root' or with 'sudo'"; exit; fi
+  #if [ "$EUID" -ne 0 ]; then echo "Remount require 'root' premissions. Please run the script as 'root' or with 'sudo'";fi
   echo "Re-mounting $1 ($2) to $3 with permission to exec."
   sudo umount -f $1
   sudo mkdir -p $3
-  sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $2 $3 #|| exit 1
+  sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $2 $3 
 }
 
 ts_exec () {
@@ -26,7 +26,7 @@ ts_exec () {
 if [[ -f ./tagasaurus && "application" == $(file -b --mime-type tagasaurus | sed 's|/.*||') ]]; then 
   
   # Runs Tagasaurus if mount point has `exec` permission
-  if [[ -n $(findmnt -O exec -nr -o TARGET --target ./tagasaurus) ]]; then echo "Tagasaurus binary found, run."; ts_exec ./tagasaurus; exit 0; fi
+  if [[ -n $(findmnt -O exec -nr -o TARGET --target ./tagasaurus) ]]; then echo "Tagasaurus binary found, run."; ts_exec ./tagasaurus; fi
   
   # If mount point has not `exec` permission: re-mount and runs Tagasaurus
   noexec_mnt=$(findmnt -O noexec -nr -o TARGET --target ./tagasaurus)
@@ -34,9 +34,9 @@ if [[ -f ./tagasaurus && "application" == $(file -b --mime-type tagasaurus | sed
     echo "Storage mounted without 'exec' permissions. Trying to re-mount."
     noexec_blk=$(findmnt -O noexec -nr -o SOURCE --target ./tagasaurus)
     remount_fat "$noexec_mnt" "$noexec_blk" "$mount_to"
-    (($? != 0)) && { printf '%s\n' "Remount Error. Quit."; exit 1; }
+    (($? != 0)) && { printf '%s\n' "Remount Error. Quit."; }
     echo "Re-mounted to $mount_to. Tagasaurus run."; 
-    ts_exec ./tagasaurus; exit 0;
+    ts_exec ./tagasaurus
   fi
 
 else
@@ -52,8 +52,7 @@ else
       ts_path_checked+="$ts_path"$'\n'
       fi
     done
-   else echo "Tagasaurus not found. Quit"; exit;
-  fi
+   else echo "Tagasaurus not found. Quit";   fi
   if [[ $(echo $ts_path_checked | wc -l) -gt 1 ]]; then 
     echo -e "Found multiple Tagasaurus folders:\n $ts_path_checked"
     ts_path_checked=$(head -n 1)
@@ -61,7 +60,7 @@ else
   fi
         
   # Runs Tagasaurus if mount point has `exec` permission
-  if [[ -n $(findmnt -O exec -nr -o TARGET --target ./tagasaurus) ]]; then echo "Tagasaurus binary found, run."; ts_exec ./tagasaurus; exit 0; fi
+  if [[ -n $(findmnt -O exec -nr -o TARGET --target ./tagasaurus) ]]; then echo "Tagasaurus binary found, run."; ts_exec ./tagasaurus; fi
   
   # If mount point has not `exec` permission: re-mount and runs Tagasaurus
   noexec_mnt=$(findmnt -O noexec -nr -o TARGET --target ./tagasaurus)
@@ -69,9 +68,9 @@ else
     echo "Storage mounted without 'exec' permissions. Trying to re-mount."
     noexec_blk=$(findmnt -O noexec -nr -o SOURCE --target ./tagasaurus)
     remount_fat "$noexec_mnt" "$noexec_blk" "$mount_to"
-    # (($? != 0)) && { printf '%s\n' "Remount Error. Quit."; exit 1; }
+    # (($? != 0)) && { printf '%s\n' "Remount Error. Quit.";; }
     echo "Re-mounted to $mount_to. Tagasaurus run."; 
-    ts_exec ./tagasaurus; #exit 0;
+    ts_exec ./tagasaurus
   fi
 
 fi
