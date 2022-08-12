@@ -14,7 +14,7 @@ remount_fat () {
   echo "Re-mounting $1 ($2) to $3 with permission to exec."
   sudo umount -f $1
   sudo mkdir -p $3
-  sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $2 $3 || exit 1
+  sudo mount -o rw,uid=$(id -u),gid=$(id -g),utf8 $2 $3 #|| exit 1
 }
 
 ts_exec () {
