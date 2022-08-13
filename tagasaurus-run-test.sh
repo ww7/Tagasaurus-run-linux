@@ -11,7 +11,7 @@ mount_to="/mnt/Tagasaurus"
 
 # Using path of script if path not passed as argument
 if [[ -z $1 ]]; then ts_path_input=$(dirname "$0"); else 
-  if [[ -d $1 ]]; then ts_path_input="$1"; else echo "Input path is \"$1\" and doesn't exist. Exit."; exit 1; fi 
+  if [[ -d $1 ]]; then ts_path_input="$1"; else echo "Input path is \"$1\" and doesn't exist. Exit."; return; fi 
 fi
 
 # Function for remount
@@ -24,7 +24,7 @@ remount_fat () {
     mount -o rw,uid=$(id -u),gid=$(id -g),utf8 "$2" "$3"
   else
     echo "Please enter the password."
-    if [[ -n $(sudo -v 2>&1 | grep "not") ]]; then echo "User \"$(whoami)\" not allowed for this operation. Remount required a 'sudo' or running from 'root'"; exit 1; fi
+    if [[ -n $(sudo -v 2>&1 | grep "not") ]]; then echo "User \"$(whoami)\" not allowed for this operation. Remount required a 'sudo' or running from 'root'"; return; fi
     cd $HOME;
     sudo umount -l "$1"
     sudo mkdir -p "$3"
@@ -50,20 +50,19 @@ if [[ -f ./tagasaurus && "application" == $(file -b --mime-type ./tagasaurus | s
 else
 
   # Serching Tagasaurus application folders
-  # ts_blk=$(findmnt -O noexec -nr -o SOURCE --target "$ts_path_input")
   if ! ts_found=$(find "$ts_path_input" -maxdepth 2 -type f -iname "tagasaurus"); then echo "Searching error. Exit."; return; fi
   
   if [[ -z "$ts_found" ]]; then echo "Tagasaurus not found. Exit"; return; fi
 
   # Checking if only one Tagasaurus application folders found, selecting first if more than one
-  if [[ $(echo "$ts_found" | wc -l) -gt 1 ]]; then
+  if [[ $(echo "$ts_found" | wc -l) -gt 0 ]]; then
     # Filtering applications
     for ts_path in $ts_found; do
       if [[ -f $ts_path && "application" == $(file -b --mime-type tagasaurus | sed 's|/.*||') ]]; then ts_path_checked+="$ts_path"$'\n'; fi
     done
   fi
 
-  if [[ $(echo "$ts_path_checked" | wc -l) -gt 1 ]]; then 
+  if [[ $(echo "$ts_path_checked" | wc -l) -gt 0 ]]; then 
     echo -e "Found multiple Tagasaurus folders:\n $ts_path_checked"
     ts_path_selected=$(head -n 1)
   fi
