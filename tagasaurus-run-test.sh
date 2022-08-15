@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# The script searches for Tagasaurus and runs it
-# If Tagasaurus is found on a USB drive that is not allowed to run, will remount it with the appropriate permissions
-# Path to Tagasaurus can be provided as argument
-# Looks Tagasaurus in the current and above directory
+# The script searches for Tagasaurus and runs it. Looks in the current and above directory.
+# Will remount storage if it mounted without required permissions.
+# Path to Tagasaurus can be provided as argument.
 
 # set -e
 set -x
