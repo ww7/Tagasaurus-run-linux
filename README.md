@@ -1,4 +1,4 @@
-# How to run
+# Script to run Tagasaurus on Linux, with remounting storage if it mounted without required permissions.
 
 ## From local folder on USB or other storage
 ```sh
@@ -16,7 +16,7 @@ Working with running by `source`, also if storage allowed to `exec` and doesn't 
 If script placed in parent directory - will search all Tagasaurus folders and runs the first valid.
 
 
-## "HTTP" script version, that run script directly from Github
+## "HTTP" script version, that runs script directly from Github
 ```sh
 # script downloading and running
 source <(wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run-http.sh)
