@@ -15,6 +15,8 @@ Working with running by `source`, also if storage allowed to `exec` and doesn't 
 
 If script placed in parent directory - will search all Tagasaurus folders and runs the first valid.
 
+Script can be run from any folder where path to Tagasaurus/USB drive/parent folder specified as argument to the script
+
 
 ## "HTTP" script version, that runs script directly from Github
 ```sh
