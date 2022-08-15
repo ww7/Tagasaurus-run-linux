@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Script searches Tagasaurus over all USB drives mounted with FAT filesystem, 
+# then check if that USB drive doesn't allow program executing and remount it with proper permissions.
+# Also, if found TagasaurusFiles data folder on USB drive and no Tagasaurus itself – propose to download.
+# Script can be easily extended for Tagasaurus updating to the latest version and for downloading to specified path.
+
 # set -e
 # trap "exit 1" ERR
 # set -uo pipefail
