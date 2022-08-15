@@ -37,7 +37,7 @@ remount_fat () {
 
 ts_exec () {
   nohup $1 &>/dev/null & disown
-  # return
+  return
   # exit
 }
 
