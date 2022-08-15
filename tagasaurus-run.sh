@@ -3,6 +3,7 @@
 # The script searches for Tagasaurus and runs it
 # If Tagasaurus is found on a USB drive that is not allowed to run, will remount it with the appropriate permissions
 # Path to Tagasaurus can be provided as argument
+# Looks Tagasaurus in the current and above directory
 
 # set -e
 # set -x
@@ -61,7 +62,7 @@ if [[ -f ./tagasaurus && "application" == $(file -b --mime-type ./tagasaurus | s
     ts_exec "$mount_to/${parent##*/}/tagasaurus"
   fi
 
-# Else serching all Tagasaurus application folders
+# Else serching all Tagasaurus application folders in the current and above directory
 else
   if ! ts_found=$(find "$ts_path_input" -maxdepth 2 -type f -iname "tagasaurus"); then echo "Searching error. Exit."; return; fi  
   if [[ -z "$ts_found" ]]; then echo "Tagasaurus not found. Exit"; return; fi
