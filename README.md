@@ -1,4 +1,4 @@
-# Script to run Tagasaurus on Linux, with remounting storage if it mounted without required permissions.
+## Script to run Tagasaurus on Linux, with remounting storage if it mounted without required permissions.
 
 ## From local folder on USB or other storage
 ```sh
