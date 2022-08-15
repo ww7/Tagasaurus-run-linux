@@ -1,31 +1,28 @@
-## Run
+# How to run
 
-### Locally
+## From locall folder on USB or other storage
 ```sh
-# cd to folder on USB storage, where script placed, then run:
-cp ./tagasaurus-run.sh /tmp && source <(cat /tmp/tagasaurus-run.sh)
+# cd to folder where script placed, then run:
+cp ./tagasaurus-run.sh /tmp && source /tmp/tagasaurus-run.sh $PWD
 
-# to download script to current folder:
+# download script to current folder:
 wget -q https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run.sh
 ```
 
 
-### From Github
+
+
+## "HTTP" script version, that run script directly from Github
 ```sh
 # script downloading and running
 source <(wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run-http.sh)
-
-# for testing
-source <(wget -qO- https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run-http-test.sh)
 ```
 
-## Description
-The script searching Tagasaurus over all USB drives mounted with FAT filesystem, then check if that USB drive don't allowed to execute and remount with proper permissions for run.
+"HTTP" script version searching Tagasaurus over all USB drives mounted with FAT filesystem, then check if that USB drive doesn't allow program executing and remount with proper permissions for run.
 
-Also if found TagasaurusFiles data folder on USB drive and no Tagasaurus itself – propose to download.
+Also, if found TagasaurusFiles data folder on USB drive and no Tagasaurus itself – propose to download.
 
-Script can be easily extended for Tagasaurus updating to latest version and for downloading to specified path (as script argument) or to first corresponding USB drive found on system.
+Script can be easily extended for Tagasaurus updating to the latest version and for downloading to specified path (as script argument) or to first corresponding USB drive found on system.
 
-
-## Note
-Remounting require a `sudo` (or running from `root`). It will ask a user password.
+# Note
+Remounting require a `sudo`. It will ask a user password.
