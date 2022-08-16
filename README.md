@@ -15,7 +15,7 @@ Remounting require a `sudo`. It will ask a user password.
 
 ```sh
 # download script to current folder:
-`wget -q https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run.sh`
+wget -q https://raw.githubusercontent.com/ww7/Tagasaurus-run-linux/main/tagasaurus-run.sh
 ```
 
 Script looking Tagasaurus in the current and above directory. 
@@ -23,7 +23,7 @@ If script placed in parent directory - will search all Tagasaurus folders and ru
 
 ```sh
 # if script placed in Tagasaurus or parent folder:
-`cp ./tagasaurus-run.sh /tmp && source /tmp/tagasaurus-run.sh $PWD`
+cp ./tagasaurus-run.sh /tmp && source /tmp/tagasaurus-run.sh $PWD
 ```
 
 Using `source` method allows unmount filesystem when it opened, script will change current directory to $HOME and unmount filesystem properly.
